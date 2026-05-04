@@ -9,30 +9,43 @@ export default function Login() {
   async function handleLogin() {
     const res = await fetch("/api/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ email, password }),
     });
 
-    if (res.ok) {
-      window.location.href = "/";
-    } else {
-      alert("Login gagal");
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message);
+      return;
     }
+
+    // 🔥 WAJIB ADA INI
+    localStorage.setItem("token", data.token);
+
+    // 🔥 redirect ke dashboard
+    window.location.href = "/";
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded-xl shadow w-full max-w-sm">
-        <h1 className="text-xl font-bold mb-4 text-center">Login</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+
+      <div className="bg-white p-6 rounded shadow w-full max-w-sm">
+
+        <h1 className="text-xl font-bold mb-4 text-center">
+          Login
+        </h1>
 
         <input
-          className="border p-2 rounded w-full mb-3"
+          className="border p-2 w-full mb-2 rounded"
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
-          className="border p-2 rounded w-full mb-4"
+          className="border p-2 w-full mb-4 rounded"
           type="password"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
@@ -44,6 +57,7 @@ export default function Login() {
         >
           Login
         </button>
+
       </div>
     </div>
   );

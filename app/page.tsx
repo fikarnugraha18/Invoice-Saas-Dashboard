@@ -20,13 +20,23 @@ export default function Home() {
 
   const [toast, setToast] = useState("");
 
+  function getToken() {
+    return localStorage.getItem("token");
+  }
+
   function showToast(msg: string) {
     setToast(msg);
     setTimeout(() => setToast(""), 2000);
   }
 
   async function fetchInvoices() {
-    const res = await fetch("/api/invoices");
+    const token = getToken();
+
+    const res = await fetch("/api/invoices", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (res.status === 401) {
       window.location.href = "/login";
@@ -40,10 +50,18 @@ export default function Home() {
   async function createInvoice() {
     if (!title || !total) return;
 
+    const token = getToken();
+
     await fetch("/api/invoices", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, total: Number(total) }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title,
+        total: Number(total),
+      }),
     });
 
     setTitle("");
@@ -53,9 +71,14 @@ export default function Home() {
   }
 
   async function deleteInvoice(id: number) {
+    const token = getToken();
+
     const res = await fetch("/api/invoices", {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ id }),
     });
 
@@ -73,9 +96,14 @@ export default function Home() {
     id: number,
     current: "PAID" | "UNPAID"
   ) {
+    const token = getToken();
+
     await fetch("/api/invoices", {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         id,
         status: current === "PAID" ? "UNPAID" : "PAID",
@@ -87,12 +115,18 @@ export default function Home() {
   }
 
   function logout() {
-    document.cookie = "token=; Max-Age=0; path=/";
+    localStorage.removeItem("token");
     window.location.href = "/login";
   }
 
   useEffect(() => {
-    fetchInvoices();
+    const token = getToken();
+
+    if (!token) {
+      window.location.href = "/login";
+    } else {
+      fetchInvoices();
+    }
   }, []);
 
   const filteredInvoices = useMemo(() => {
@@ -129,58 +163,20 @@ export default function Home() {
   return (
     <div className="flex min-h-screen bg-gray-50">
 
-      {/* TOAST */}
       {toast && (
         <div className="fixed top-5 right-5 bg-black text-white px-4 py-2 rounded shadow z-50">
           {toast}
         </div>
       )}
 
-      {/* MOBILE SIDEBAR */}
-      <div
-        className={`fixed inset-0 z-40 md:hidden transition ${
-          sidebarOpen ? "visible" : "invisible"
-        }`}
-      >
-        <div
-          className="absolute inset-0 bg-black bg-opacity-40"
-          onClick={() => setSidebarOpen(false)}
-        />
-
-        <div
-          className={`absolute left-0 top-0 h-full w-64 bg-black text-white p-6 transform transition-transform duration-300 ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="mb-6 text-white"
-          >
-            ✖ Close
-          </button>
-
-          <h1 className="text-xl font-bold">Finvo</h1>
-        </div>
-      </div>
-
-      {/* SIDEBAR DESKTOP */}
       <div className="hidden md:flex flex-col w-64 bg-black text-white p-6">
         <h1 className="text-xl font-bold mb-8">Finvo</h1>
         <p className="text-gray-300">Dashboard</p>
       </div>
 
-      {/* MAIN */}
       <div className="flex-1 p-4 md:p-10">
 
-        {/* HEADER */}
         <div className="flex justify-between items-center mb-6">
-          <button
-            className="md:hidden text-xl"
-            onClick={() => setSidebarOpen(true)}
-          >
-            ☰
-          </button>
-
           <h1 className="text-xl md:text-2xl font-bold">
             Dashboard
           </h1>
@@ -193,7 +189,6 @@ export default function Home() {
           </button>
         </div>
 
-        {/* STATS */}
         <div className="bg-white p-4 rounded-xl shadow mb-6">
           <p className="text-sm text-gray-500 mb-2">
             Revenue Overview
@@ -216,7 +211,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* SEARCH + FILTER */}
         <div className="flex flex-col md:flex-row gap-2 mb-4">
           <input
             className="border p-3 rounded w-full"
@@ -238,7 +232,6 @@ export default function Home() {
           </select>
         </div>
 
-        {/* FORM */}
         <div className="bg-white p-4 rounded-xl shadow mb-6 flex flex-col md:flex-row gap-2">
           <input
             className="border p-3 rounded w-full"
@@ -257,23 +250,22 @@ export default function Home() {
 
           <button
             onClick={createInvoice}
-            className="bg-black text-white px-4 py-3 rounded hover:scale-105 transition"
+            className="bg-black text-white px-4 py-3 rounded"
           >
             Add
           </button>
         </div>
 
-        {/* LIST */}
         {filteredInvoices.length === 0 ? (
           <div className="bg-white p-4 rounded shadow text-center text-gray-500">
             No data found.
           </div>
         ) : (
-          <div className="space-y-4 md:space-y-3">
+          <div className="space-y-4">
             {filteredInvoices.map((inv) => (
               <div
                 key={inv.id}
-                className="bg-white p-4 rounded-xl shadow flex flex-col md:flex-row md:justify-between hover:shadow-md transition"
+                className="bg-white p-4 rounded-xl shadow flex justify-between"
               >
                 <div>
                   <p className="font-semibold">{inv.title}</p>
@@ -283,7 +275,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="flex gap-2 mt-2 md:mt-0">
+                <div className="flex gap-2">
                   <button
                     onClick={() =>
                       toggleStatus(inv.id, inv.status)

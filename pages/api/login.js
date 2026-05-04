@@ -25,10 +25,5 @@ export default async function handler(req, res) {
     { expiresIn: "1d" }
   );
 
-  res.setHeader(
-    "Set-Cookie",
-    `token=${token}; HttpOnly; Path=/; Max-Age=86400`
-  );
-
-  res.json({ message: "login success" });
+  res.json({ token });
 }
