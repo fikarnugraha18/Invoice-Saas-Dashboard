@@ -1,13 +1,16 @@
 import jwt from "jsonwebtoken";
 
-export function getUserId(req: any): number {
-  const authHeader = req.headers.authorization;
+export function getUserFromReq(req: any) {
+  const cookie = req.headers.cookie;
 
-  if (!authHeader) {
-    throw new Error("No token");
-  }
+  if (!cookie) throw new Error("No cookie");
 
-  const token = authHeader.split(" ")[1];
+  const token = cookie
+    .split(";")
+    .find((c: string) => c.trim().startsWith("token="))
+    ?.split("=")[1];
+
+  if (!token) throw new Error("No token");
 
   const decoded: any = jwt.verify(
     token,

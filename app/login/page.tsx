@@ -5,13 +5,19 @@ import { useState } from "react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin() {
+    if (!email || !password) return;
+
+    setLoading(true);
+
     const res = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
 
@@ -19,33 +25,30 @@ export default function Login() {
 
     if (!res.ok) {
       alert(data.message);
+      setLoading(false);
       return;
     }
 
-    // 🔥 WAJIB ADA INI
-    localStorage.setItem("token", data.token);
-
-    // 🔥 redirect ke dashboard
     window.location.href = "/";
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
 
-      <div className="bg-white p-6 rounded shadow w-full max-w-sm">
+      <div className="bg-white p-6 rounded-xl shadow w-full max-w-sm">
 
-        <h1 className="text-xl font-bold mb-4 text-center">
-          Login
+        <h1 className="text-2xl font-bold text-center mb-6">
+          Login to Finvo
         </h1>
 
         <input
-          className="border p-2 w-full mb-2 rounded"
+          className="border p-3 w-full mb-3 rounded"
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
-          className="border p-2 w-full mb-4 rounded"
+          className="border p-3 w-full mb-4 rounded"
           type="password"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
@@ -53,10 +56,17 @@ export default function Login() {
 
         <button
           onClick={handleLogin}
-          className="bg-black text-white w-full py-2 rounded"
+          className="bg-black text-white w-full py-3 rounded"
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
+
+        <p className="text-sm text-center mt-4 text-gray-500">
+          Belum punya akun?{" "}
+          <a href="/register" className="text-blue-500 font-medium">
+            Register
+          </a>
+        </p>
 
       </div>
     </div>

@@ -1,12 +1,12 @@
 import prisma from "@/lib/prisma";
-import { getUserId } from "@/lib/auth";
+import { getUserFromReq } from "@/lib/auth";
 
 export default async function handler(req, res) {
   let userId;
 
   try {
-    userId = getUserId(req);
-  } catch (error) {
+    userId = getUserFromReq(req);
+  } catch {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
         title,
         total: Number(total),
         status: "UNPAID",
-        userId: userId,
+        userId,
       },
     });
 
@@ -37,37 +37,23 @@ export default async function handler(req, res) {
   if (req.method === "DELETE") {
     const { id } = req.body;
 
-    try {
-      await prisma.invoice.delete({
-        where: {
-          id,
-          userId,
-        },
-      });
+    await prisma.invoice.delete({
+      where: { id, userId },
+    });
 
-      return res.json({ message: "deleted" });
-    } catch (err) {
-      return res.status(403).json({ message: "Forbidden" });
-    }
+    return res.json({ message: "deleted" });
   }
 
   if (req.method === "PUT") {
     const { id, status } = req.body;
 
-    try {
-      const updated = await prisma.invoice.update({
-        where: {
-          id,
-          userId,
-        },
-        data: { status },
-      });
+    const updated = await prisma.invoice.update({
+      where: { id, userId },
+      data: { status },
+    });
 
-      return res.json(updated);
-    } catch (err) {
-      return res.status(403).json({ message: "Forbidden" });
-    }
+    return res.json(updated);
   }
 
-  return res.status(405).json({ message: "Method not allowed" });
+  return res.status(405).end();
 }

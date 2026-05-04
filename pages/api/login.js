@@ -24,6 +24,11 @@ export default async function handler(req, res) {
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
   );
+  
+  res.setHeader(
+    "Set-Cookie",
+    `token=${token}; HttpOnly; Path=/; Max-Age=86400`
+  );
 
-  res.json({ token });
+  res.json({ message: "Login success" });
 }

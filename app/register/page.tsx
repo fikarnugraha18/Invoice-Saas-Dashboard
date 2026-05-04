@@ -20,49 +20,50 @@ export default function Register() {
       body: JSON.stringify({ email, password }),
     });
 
-    setLoading(false);
+    const data = await res.json();
 
-    if (res.ok) {
-      window.location.href = "/";
-    } else {
-      alert("Register gagal");
+    if (!res.ok) {
+      alert(data.message);
+      setLoading(false);
+      return;
     }
+
+    alert("Register success, please login");
+    window.location.href = "/login";
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
 
-      <div className="w-full max-w-md bg-white p-6 rounded-xl shadow">
+      <div className="bg-white p-6 rounded-xl shadow w-full max-w-sm">
 
         <h1 className="text-2xl font-bold text-center mb-6">
-          Create Account
+          Create Finvo Account
         </h1>
 
-        <div className="space-y-3">
-          <input
-            className="w-full border p-2 rounded"
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <input
+          className="border p-3 w-full mb-3 rounded"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          <input
-            className="w-full border p-2 rounded"
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <input
+          className="border p-3 w-full mb-4 rounded"
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-          <button
-            onClick={handleRegister}
-            className="w-full bg-black text-white py-2 rounded mt-2"
-          >
-            {loading ? "Creating..." : "Register"}
-          </button>
-        </div>
+        <button
+          onClick={handleRegister}
+          className="bg-black text-white w-full py-3 rounded"
+        >
+          {loading ? "Registering..." : "Register"}
+        </button>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Already have an account?{" "}
-          <a href="/login" className="text-black font-medium">
+        <p className="text-sm text-center mt-4 text-gray-500">
+          Sudah punya akun?{" "}
+          <a href="/login" className="text-blue-500 font-medium">
             Login
           </a>
         </p>
