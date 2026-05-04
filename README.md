@@ -1,27 +1,35 @@
-# 🚀 Invoice SaaS Dashboard
+# 🚀 Finvo
 
-A full-stack SaaS-style invoice management dashboard built with modern web technologies.
-Designed to simulate a real-world product with authentication, analytics, and responsive UI.
+**Simple invoicing. Clear insights.**
+
+Finvo is a full-stack SaaS-style invoice and revenue tracking dashboard built with modern web technologies.
+It simulates a real-world product with authentication, analytics, and responsive UI.
+
+---
+
+## 🌐 Live Demo
+
+https://invoice-saas-dashboard.vercel.app
 
 ---
 
 ## ✨ Features
 
-* 🔐 Authentication (JWT-based login & register)
+* 🔐 Authentication (JWT login & register)
 * 📊 Revenue analytics dashboard
 * 🧾 Create, update, delete invoices
 * 🔍 Search & filter invoices (paid / unpaid)
 * 📱 Fully responsive (mobile, tablet, desktop)
-* 💡 Clean SaaS UI with modern UX
-* ⚡ Real-time UI updates after actions
+* ⚡ Real-time UI updates
+* 💡 Clean SaaS UI (production-style)
 
 ---
 
 ## 🧠 Business Logic
 
-* Paid invoices cannot be deleted (real-world constraint)
-* Revenue is calculated dynamically from all invoices
-* Invoice status can be toggled (paid ↔ unpaid)
+* Paid invoices cannot be deleted
+* Revenue calculated dynamically
+* Status toggle (paid ↔ unpaid)
 
 ---
 
@@ -29,24 +37,22 @@ Designed to simulate a real-world product with authentication, analytics, and re
 
 * **Frontend**: Next.js (App Router), React, Tailwind CSS
 * **Backend**: Next.js API Routes
-* **Database**: PostgreSQL + Prisma ORM
-* **Auth**: JWT (cookie-based)
+* **Database**: PostgreSQL + Prisma
+* **Auth**: JWT
 
 ---
 
-## ⚙️ Setup & Installation
+## ⚙️ Setup
 
 ```bash
-git clone https://github.com/your-username/invoice-saas-dashboard.git
-cd invoice-saas-dashboard
+git clone https://github.com/fikarnugraha18/Invoice-Saas-Dashboard.git
+cd Invoice-Saas-Dashboard
 npm install
 ```
 
 ---
 
 ## 🔑 Environment Variables
-
-Create `.env` or `.env.local`:
 
 ```env
 DATABASE_URL=your_database_url
@@ -64,35 +70,18 @@ npm run dev
 
 ---
 
-## 🌐 Deployment
+## 🚀 Deployment
 
-Deployed using **Vercel**
-
-Make sure to:
-
-* Add environment variables in Vercel dashboard
-* Use a cloud PostgreSQL database (Neon / Supabase / Railway)
-
----
-
-## 🎯 Purpose
-
-This project was built to demonstrate:
-
-* Full-stack development skills
-* Real-world product thinking
-* Clean UI/UX design
-* Scalable app structure
+Deployed on Vercel
 
 ---
 
 ## 👨‍💻 Author
 
-Developed by Zulfikar Satya Nugraha
+Zulfikar Satya Nugraha
 
 ---
 
 ## 📌 Notes
 
-This is not just a CRUD app —
-it simulates a real SaaS product with business rules and user experience in mind.
+This project demonstrates full-stack development, product thinking, and modern UI/UX practices.

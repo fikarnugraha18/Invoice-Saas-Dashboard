@@ -69,7 +69,10 @@ export default function Home() {
     showToast("Deleted");
   }
 
-  async function toggleStatus(id: number, current: string) {
+  async function toggleStatus(
+    id: number,
+    current: "PAID" | "UNPAID"
+  ) {
     await fetch("/api/invoices", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -126,12 +129,14 @@ export default function Home() {
   return (
     <div className="flex min-h-screen bg-gray-50">
 
+      {/* TOAST */}
       {toast && (
         <div className="fixed top-5 right-5 bg-black text-white px-4 py-2 rounded shadow z-50">
           {toast}
         </div>
       )}
 
+      {/* MOBILE SIDEBAR */}
       <div
         className={`fixed inset-0 z-40 md:hidden transition ${
           sidebarOpen ? "visible" : "invisible"
@@ -149,22 +154,25 @@ export default function Home() {
         >
           <button
             onClick={() => setSidebarOpen(false)}
-            className="mb-6"
+            className="mb-6 text-white"
           >
             ✖ Close
           </button>
 
-          <h1 className="text-xl font-bold">InvoiceApp</h1>
+          <h1 className="text-xl font-bold">Finvo</h1>
         </div>
       </div>
 
+      {/* SIDEBAR DESKTOP */}
       <div className="hidden md:flex flex-col w-64 bg-black text-white p-6">
-        <h1 className="text-xl font-bold mb-8">InvoiceApp</h1>
+        <h1 className="text-xl font-bold mb-8">Finvo</h1>
         <p className="text-gray-300">Dashboard</p>
       </div>
 
+      {/* MAIN */}
       <div className="flex-1 p-4 md:p-10">
 
+        {/* HEADER */}
         <div className="flex justify-between items-center mb-6">
           <button
             className="md:hidden text-xl"
@@ -185,6 +193,7 @@ export default function Home() {
           </button>
         </div>
 
+        {/* STATS */}
         <div className="bg-white p-4 rounded-xl shadow mb-6">
           <p className="text-sm text-gray-500 mb-2">
             Revenue Overview
@@ -207,10 +216,11 @@ export default function Home() {
           </div>
         </div>
 
+        {/* SEARCH + FILTER */}
         <div className="flex flex-col md:flex-row gap-2 mb-4">
           <input
             className="border p-3 rounded w-full"
-            placeholder="Search invoice..."
+            placeholder="Search invoices..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -219,7 +229,7 @@ export default function Home() {
             className="border p-3 rounded"
             value={filter}
             onChange={(e) =>
-              setFilter(e.target.value as any)
+              setFilter(e.target.value as "ALL" | "PAID" | "UNPAID")
             }
           >
             <option value="ALL">All</option>
@@ -228,6 +238,7 @@ export default function Home() {
           </select>
         </div>
 
+        {/* FORM */}
         <div className="bg-white p-4 rounded-xl shadow mb-6 flex flex-col md:flex-row gap-2">
           <input
             className="border p-3 rounded w-full"
@@ -252,6 +263,7 @@ export default function Home() {
           </button>
         </div>
 
+        {/* LIST */}
         {filteredInvoices.length === 0 ? (
           <div className="bg-white p-4 rounded shadow text-center text-gray-500">
             No data found.
