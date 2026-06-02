@@ -1,87 +1,141 @@
-# 🚀 Finvo
+# Finvo
 
-**Simple invoicing. Clear insights.**
+Simple invoicing. Clear insights.
 
 Finvo is a full-stack SaaS-style invoice and revenue tracking dashboard built with modern web technologies.
-It simulates a real-world product with authentication, analytics, and responsive UI.
+
+Designed to simulate a real-world business product, Finvo combines authentication, invoice management, analytics, and responsive user experience in a production-style application.
 
 ---
 
-## 🌐 Live Demo
+## Live Demo
 
 https://invoice-saas-dashboard.vercel.app
 
 ---
 
-## ✨ Features
+## Key Features
 
-* 🔐 Authentication (JWT login & register)
-* 📊 Revenue analytics dashboard
-* 🧾 Create, update, delete invoices
-* 🔍 Search & filter invoices (paid / unpaid)
-* 📱 Fully responsive (mobile, tablet, desktop)
-* ⚡ Real-time UI updates
-* 💡 Clean SaaS UI (production-style)
+🔐 Authentication (JWT Login & Register)
+
+📊 Revenue Analytics Dashboard
+
+🧾 Invoice Management (Create, Update, Delete)
+
+🔍 Search & Filter (Paid / Unpaid)
+
+📱 Responsive Across Desktop, Tablet, and Mobile
+
+⚡ Dynamic UI Updates
+
+💡 Modern SaaS-style Interface
 
 ---
 
-## 🧠 Business Logic
+## Business Rules
 
 * Paid invoices cannot be deleted
-* Revenue calculated dynamically
-* Status toggle (paid ↔ unpaid)
+* Revenue metrics are calculated dynamically
+* Invoice status can be updated (Paid ↔ Unpaid)
+* Dashboard reflects current invoice state
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-* **Frontend**: Next.js (App Router), React, Tailwind CSS
-* **Backend**: Next.js API Routes
-* **Database**: PostgreSQL + Prisma
-* **Auth**: JWT
+### Frontend
+
+* Next.js (App Router)
+* React
+* Tailwind CSS
+
+### Backend
+
+* Next.js API Routes
+
+### Database
+
+* PostgreSQL
+* Prisma ORM
+
+### Authentication
+
+* JWT
 
 ---
 
-## ⚙️ Setup
+## Application Flow
+
+User Authentication
+↓
+Dashboard Overview
+↓
+Invoice Management
+↓
+Revenue Calculation
+↓
+Database Persistence
+
+---
+
+## Core Functionality
+
+* Secure login and registration
+* Invoice CRUD operations
+* Revenue analytics
+* Filtering and search
+* Responsive dashboard experience
+* Database-driven state management
+
+---
+
+## Quick Start
+
+Clone repository
 
 ```bash
 git clone https://github.com/fikarnugraha18/Invoice-Saas-Dashboard.git
-cd Invoice-Saas-Dashboard
+```
+
+Install dependencies
+
+```bash
 npm install
 ```
 
----
-
-## 🔑 Environment Variables
+Setup environment variables
 
 ```env
-DATABASE_URL=your_database_url
-JWT_SECRET=your_secret_key
+DATABASE_URL=
+JWT_SECRET=
 ```
 
----
-
-## 🧪 Run Locally
+Generate Prisma Client
 
 ```bash
 npx prisma generate
+```
+
+Run locally
+
+```bash
 npm run dev
 ```
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 Deployed on Vercel
 
 ---
 
-## 👨‍💻 Author
+## What This Project Demonstrates
 
-Zulfikar Satya Nugraha
-
----
-
-## 📌 Notes
-
-This project demonstrates full-stack development, product thinking, and modern UI/UX practices.
+* Full Stack Development
+* Product Thinking
+* Authentication & Authorization
+* Relational Database Design
+* Dashboard Architecture
+* Responsive UI Development
+* Modern SaaS Application Patterns
