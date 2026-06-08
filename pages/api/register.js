@@ -3,27 +3,71 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export default async function handler(req, res) {
-  const { email, password } = req.body;
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      message: "Method not allowed",
+    });
+  }
 
-  const hashed = await bcrypt.hash(password, 10);
+  try {
+    const { email, password } = req.body;
 
-  const user = await prisma.user.create({
-    data: {
-      email,
-      password: hashed,
-    },
-  });
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Email dan password wajib diisi",
+      });
+    }
 
-  const token = jwt.sign(
-    { userId: user.id },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
 
-  res.setHeader(
-    "Set-Cookie",
-    `token=${token}; HttpOnly; Path=/; Max-Age=86400`
-  );
+    if (existingUser) {
+      return res.status(409).json({
+        message: "Email sudah terdaftar",
+      });
+    }
 
-  res.json({ message: "registered" });
+    const hashedPassword = await bcrypt.hash(
+      password,
+      10
+    );
+
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    const token = jwt.sign(
+      {
+        userId: user.id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    res.setHeader(
+      "Set-Cookie",
+      `token=${token}; HttpOnly; Path=/; Max-Age=86400`
+    );
+
+    return res.status(201).json({
+      success: true,
+      message: "Register success",
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
 }
